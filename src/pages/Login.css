@@ -1,0 +1,15 @@
+.background-image {
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  height: 100%; 
+  color: white; 
+}
+
+.ion-padding {
+  background: rgba(0, 0, 0, 0.5); 
+  border-radius: 10px; 
+}
+#Login {
+  --background: url('https://imgs.search.brave.com/mKDpSwLsACxv6dCL8SH1zjLAQV4EFv38i7Msqks-VKs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTU3/NTcwNDkwL3Bob3Rv/L3R1cm5zYmVycnkt/dG9pbGUtbWVkaXVt/LWFudGlxdWUtZmFi/cmljLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1iaXJ4V3d3/S3g0YnpDbnJHeVFv/LWJtdGJNUmFPUi1o/bVNJUTgzc0hIQTln/PQ') no-repeat center center / cover;
+}

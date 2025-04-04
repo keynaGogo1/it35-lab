@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+
 import {
   IonItem,
   IonList,
@@ -14,6 +14,7 @@ import {
   IonToolbar,
   IonTitle,
 } from '@ionic/react';
+import React, { useState } from 'react';
 
 const sampleData = [
   { name: 'Shoes', image: 'https://imgs.search.brave.com/GoUokcrKy_ixU1NneMYxNQlZcQZVYLuq9EfolGjlDlA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pNS53/YWxtYXJ0aW1hZ2Vz/LmNvbS9zZW8vU0lM/TEVOT1JUSC1LaWRz/LVRvZGRsZXItU2hv/ZXMtQm95cy1HaXJs/cy1CcmVhdGhhYmxl/LVNuZWFrZXJzLUF0/aGxldGljLVJ1bm5p/bmctU2hvZXMtVG9k/ZGxlci1MaXR0bGUt/S2lkcy1CaWctS2lk/c184MGEwNWU1NC1i/ZGE1LTQxYmYtODRl/Mi1mYTdkODg4ODQx/MWYuNDdkMWMyYmM1/NTA3MTAwZjQxYzVh/YmJiNmRhYmI5OWMu/anBlZz9vZG5IZWln/aHQ9Nzg0Jm9kbldp/ZHRoPTU4MCZvZG5C/Zz1GRkZGRkY' },

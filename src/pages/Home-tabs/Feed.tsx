@@ -30,6 +30,7 @@ const Feed: React.FC = () => {
       img: "https://images.unsplash.com/photo-1577640256262-8488aa247e17?w=600&auto=format&fit=crop&q=60",
       content: "Consistency and kindness go a long way."
     }
+
   ];
 
   return (

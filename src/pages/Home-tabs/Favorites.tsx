@@ -1,76 +1,92 @@
+import React, { useState } from 'react';
 import {
-  IonButtons,
+  IonBreadcrumb,
+  IonBreadcrumbs,
   IonContent,
   IonHeader,
-  IonMenuButton,
+
   IonPage,
   IonTitle,
   IonToolbar,
-  IonList,
-  IonItem,
-  IonLabel,
+
   IonCard,
+  IonCardHeader,
+  IonCardTitle,
   IonCardContent,
-  IonText,
+
   IonImg,
-  IonAlert,
-} from "@ionic/react";
-import { useState } from "react";
+} from '@ionic/react';
 
-const favoriteItems = [
-  { name: "Pizza", price: "$12", img: "https://imgs.search.brave.com/2gc7HoNiJF0jppYkzSWDXjZo8h8KzI2OUAl8HPVRnZA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2ExL2M0/LzA0L2ExYzQwNGJl/YTQ5YzAxNDMwNThi/YzRkZDlkYTc5ZDMz/LmpwZw" },
-  { name: "Ice Cream", price: "$5", img: "https://imgs.search.brave.com/xnbeXfTXZBnDVYXVlL0cHDvbeGBY37JcJN9DcSsAm_A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzUxLzIzLzQx/LzM2MF9GXzE1MTIz/NDE1Nl8zcTJ2dzBs/cGlWVVJvaTNQaVlt/QmRlaEhVVmJGUVdw/Si5qcGc" },
-  { name: "Burgers", price: "$8", img: "https://imgs.search.brave.com/9OTFW10L4OvmWQ5yRQIA_IUlJGZG0gRUnF4w9IoVRnk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTAw/ODAxNjU3Mi9waG90/by9idXJnZXIuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPW5M/cGgzMklUaU90QlFp/RHFuY3JPSWxYMmRu/SnZYeVM4ZS1Bd29a/QllOWDQ9" },
-  { name: "Pasta", price: "$10", img: "https://imgs.search.brave.com/AzwEB6pDFMwL5KAjKg16QaVeLOge2in4Azo7NOdI7O0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAwLzY0Lzk3LzY2/LzM2MF9GXzY0OTc2/NjAwX3VzUFhjY1JU/RzlLeE1LY0tTTHpx/U1dXdGxSWnpqY0VV/LmpwZw" },
-];
+const items = {
+  things: [
+    { name: 'Shoes', image: 'https://imgs.search.brave.com/mDDXcQf5KzbRzOO_3lxYRfWSO3-XlYXLVfE9DXeIUXM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzY2LzQyLzMz/LzM2MF9GXzEyNjY0/MjMzNzJfa3QxV1pV/WE5mMzd3Tktldktz/VlRGbHhlRTlGWXIw/YTEuanBn', description: 'Comfortable and stylish footwear.' },
+    { name: 'Headset', image: 'https://imgs.search.brave.com/fE7MuNWpd1ljsak5yM0vMhejkdMseWGJrR2huQG7njs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/ODF0aFY3U29MWkwu/anBn', description: 'Noise-cancelling headphones.' },
+    { name: 'Dress', image: 'https://imgs.search.brave.com/M8bx7ubnENKS9hdCMHDZ0WkBnPyCDY4jrDP2WbqJBvI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAwLzQ5LzIyLzY0/LzM2MF9GXzQ5MjI2/NDcxX2hNVTFhUWMw/VHlkQUMzT0drVWVK/cjhVRjNxVDdBR1Np/LmpwZw', description: 'Elegant dress for any occasion.' },
+    { name: 'MakeUp', image: 'https://imgs.search.brave.com/f4Yhhf2dedJGfEvr5VHbnyK50IPmG2QbCZ4w2hk7ong/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pNS53/YWxtYXJ0aW1hZ2Vz/LmNvbS9zZW8vTUlT/Uy1ST1NFLU1ha2V1/cC1LaXQtZm9yLVdv/bWVuLUZ1bGwtS2l0/LTEyLUNvbG9ycy1F/eWVzaGFkb3ctUGFs/ZXR0ZS1HaWZ0LVNl/dC1mb3ItV29tZW4t/VGVlbnNfYzFhMDY5/YWUtODJlYy00Zjc3/LWFlMjMtYTRmOGRj/NzcxYzY4LjNjY2I2/NTZiNTZkNWE2N2I0/MzdmNjkwMjNiNzFj/YWI0LmpwZWc_b2Ru/SGVpZ2h0PTU4MCZv/ZG5XaWR0aD01ODAm/b2RuQmc9RkZGRkZG', description: 'Top quality cosmetic products.' },
+  ],
+  foods: [
+    { name: 'Fried', image: 'https://imgs.search.brave.com/CPIHA7gJyy7toW2jmr30cGA4hXr2_X2XlR2svjuBGhE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9o/aWdoLWFuZ2xlLWZy/aWVzLWZyaWVkLWNo/aWNrZW5fMjMtMjE0/ODI3MzA0NC5qcGc_/c2VtdD1haXNfaHli/cmlk', description: 'Crispy and savory fried delights.' },
+    { name: 'Tortang Talong', image: 'https://imgs.search.brave.com/bf5LI0r4b9jbGBiN9oj-xNAI_eLZzKbj8rrqh1H0WGU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy83/LzdlL1JlbGxlbm9u/Z190YWxvbmcuanBn', description: 'Healthy and tasty eggplant dishes.' },
+    { name: 'Chocolates', image: 'https://imgs.search.brave.com/KSCoB16nvcJBrqpmGGIYqekxWtJ5Om97q-X1BjuWnqs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQw/MDQ1MjY5Ny9waG90/by9kYXJrLWNob2Nv/bGF0ZS1iYXItd2l0/aC1jb2NvYS1iZWFu/cy5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9allERmQtQzlr/TWtaVlRUcVA1M2Qy/QzMtWFYwUlhURWRx/UEZyTDIyVG1nbz0', description: 'Sweet and smooth chocolate treats.' },
+    { name: 'Ice cream', image: 'https://imgs.search.brave.com/xnbeXfTXZBnDVYXVlL0cHDvbeGBY37JcJN9DcSsAm_A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzUxLzIzLzQx/LzM2MF9GXzE1MTIz/NDE1Nl8zcTJ2dzBs/cGlWVVJvaTNQaVlt/QmRlaEhVVmJGUVdw/Si5qcGc', description: 'Cool and creamy ice cream flavors.' },
+  ],
+};
 
-const Favorites: React.FC = () => { 
-  const [selectedItem, setSelectedItem] = useState<{ name: string; price: string } | null>(null);
+const Favorites: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<'things' | 'foods' | null>(null);
+
+  const handleSelect = (category: 'things' | 'foods') => {
+    setSelectedCategory(category);
+  };
 
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
+        <IonToolbar color="primary">
           <IonTitle>Favorites</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent
-        fullscreen
-        className="ion-padding"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)",
-        }}
-      >
-        <IonCard style={{ width: "100%", maxWidth: "400px", textAlign: "center", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", borderRadius: "15px" }}>
-          <IonCardContent>
-            <IonText color="primary">
-              <h2 style={{ fontWeight: "bold" }}>My Favorite Items</h2>
-            </IonText>
-            <IonList>
-              {favoriteItems.map((item, index) => (
-                <IonItem button key={index} onClick={() => setSelectedItem(item)}>
-                  <IonImg src={item.img} style={{ width: "50px", height: "50px", marginRight: "10px" }} />
-                  <IonLabel>{item.name}</IonLabel>
-                </IonItem>
-              ))}
-            </IonList>
-          </IonCardContent>
-        </IonCard>
-        
-        <IonAlert
-          isOpen={!!selectedItem}
-          onDidDismiss={() => setSelectedItem(null)}
-          header={selectedItem?.name}
-          message={`Price: ${selectedItem?.price}`}
-          buttons={["OK"]}
-        />
+      <IonContent className="ion-padding" fullscreen>
+        <style>
+          {`
+            .fade-in {
+              animation: fadeIn 0.6s ease-in-out;
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .breadcrumb-container {
+              margin-bottom: 16px;
+            }
+            .cards-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+              gap: 16px;
+            }
+          `}
+        </style>
+
+        <div className="breadcrumb-container">
+          <IonBreadcrumbs>
+            <IonBreadcrumb onClick={() => handleSelect('things')}>Things</IonBreadcrumb>
+            <IonBreadcrumb onClick={() => handleSelect('foods')}>Foods</IonBreadcrumb>
+          </IonBreadcrumbs>
+        </div>
+
+        {selectedCategory && (
+          <div className="cards-grid fade-in">
+            {items[selectedCategory].map((item, index) => (
+              <IonCard key={index}>
+                <IonImg src={item.image} />
+                <IonCardHeader>
+                  <IonCardTitle>{item.name}</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>{item.description}</IonCardContent>
+              </IonCard>
+            ))}
+          </div>
+        )}
       </IonContent>
     </IonPage>
   );

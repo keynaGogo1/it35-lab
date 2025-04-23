@@ -1,20 +1,21 @@
-import { 
+import {
   IonAlert,
-  IonAvatar,
   IonButton,
-  IonContent, 
-  IonIcon, 
-  IonInput, 
-  IonInputPasswordToggle,  
-  IonPage,  
-  IonToast,  
-  useIonRouter
+  IonContent,
+  IonInput,
+  IonInputPasswordToggle,
+  IonPage,
+  IonToast,
+  useIonRouter,
 } from '@ionic/react';
-import { logoIonic } from 'ionicons/icons';
 import { useState } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '../utils/supabaseClient'; 
 
-const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({ message, isOpen, onClose }) => {
+const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({
+  message,
+  isOpen,
+  onClose,
+}) => {
   return (
     <IonAlert
       isOpen={isOpen}
@@ -43,75 +44,120 @@ const Login: React.FC = () => {
       return;
     }
 
-    setShowToast(true); 
+    setShowToast(true);
     setTimeout(() => {
       navigation.push('/it35-lab/app', 'forward', 'replace');
     }, 300);
   };
-  
+
   return (
     <IonPage>
-      <IonContent className='ion-padding'>
-        <div style={{
-          display: 'flex',
-          flexDirection:'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop:'25%'
-        }}>
-          <IonAvatar
+      <IonContent fullscreen className="ion-padding" scrollY={false}>
+        {/* Enhanced Background Design */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, #8e44ad, #3498db)',
+            animation: 'backgroundAnimation 5s ease-in-out infinite',
+            zIndex: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <svg
+            viewBox="0 0 1440 320"
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '150px',
-              height: '150px',
-              borderRadius: '50%', 
-              overflow: 'hidden' 
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              height: 'auto',
+              zIndex: 1,
             }}
           >
-            <IonIcon 
-              icon={logoIonic}
-              color='primary'
-              style={{ fontSize: '120px', color: '#6c757d' }} 
-            />
-          </IonAvatar>
-          <h1 style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>USER LOGIN</h1>
+            <path
+              fill="#ffffff"
+              fillOpacity="0.3"
+              d="M0,224L40,202.7C80,181,160,139,240,122.7C320,107,400,117,480,144C560,171,640,213,720,229.3C800,245,880,235,960,202.7C1040,171,1120,117,1200,96C1280,75,1360,85,1400,90.7L1440,96L1440,320L0,320Z"
+            ></path>
+          </svg>
+        </div>
+
+        {/* Login Card */}
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            width: '100%',
+            maxWidth: '400px',
+            backgroundColor: 'white',
+            padding: '35px 25px',
+            borderRadius: '25px',
+            margin: 'auto',
+            marginTop: '12vh',
+            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+            textAlign: 'center',
+            transition: 'transform 0.3s ease',
+          }}
+        >
+          <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '30px', color: '#333' }}>
+            Welcome Back, Let’s Sign In
+          </h2>
+
           <IonInput
-            label="Email" 
-            labelPlacement="floating" 
+            label="Email"
+            labelPlacement="floating"
             fill="outline"
             type="email"
-            placeholder="Enter Email"
+            placeholder="Enter your email"
             value={email}
-            onIonChange={e => setEmail(e.detail.value!)}
+            onIonChange={(e) => setEmail(e.detail.value!)}
+            style={{ marginBottom: '15px' }}
           />
-          <IonInput style={{ marginTop:'10px' }}      
+
+          <IonInput
+            label="Password"
+            labelPlacement="floating"
             fill="outline"
             type="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             value={password}
-            onIonChange={e => setPassword(e.detail.value!)}
+            onIonChange={(e) => setPassword(e.detail.value!)}
+            style={{ marginBottom: '20px' }}
           >
-            <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
+            <IonInputPasswordToggle slot="end" />
           </IonInput>
+
+          <IonButton
+            expand="block"
+            shape="round"
+            onClick={doLogin}
+            style={{
+              marginBottom: '15px',
+              background: '#3498db',
+              color: 'white',
+              fontWeight: '600',
+            }}
+          >
+            Login
+          </IonButton>
+
+          <IonButton
+            routerLink="/it35-lab/Register"
+            fill="clear"
+            size="small"
+            shape="round"
+            style={{
+              textTransform: 'none',
+              color: '#3498db',
+              fontWeight: 500,
+            }}
+          >
+            Don’t have an account?&nbsp;<strong>Register here</strong>
+          </IonButton>
         </div>
-        <IonButton onClick={doLogin} expand="full" shape='round'>
-          Login
-        </IonButton>
 
-        <IonButton routerLink="/it35-lab/Register" expand="full" fill="clear" shape='round'>
-          Don't have an account? Register here
-        </IonButton>
-
-        {/* Reusable AlertBox Component */}
+        {/* Alert & Toast */}
         <AlertBox message={alertMessage} isOpen={showAlert} onClose={() => setShowAlert(false)} />
-
-        {/* IonToast for success message */}
         <IonToast
           isOpen={showToast}
           onDidDismiss={() => setShowToast(false)}

@@ -19,12 +19,22 @@ import {
   IonHeader,
   IonTitle,
   IonTextarea,
-  IonFooter
+  IonFooter,
+  IonChip,
+  IonLabel,
+  IonGrid
 } from '@ionic/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { User } from '@supabase/supabase-js';
-import { pencilOutline, trashOutline, createOutline, checkmarkOutline, closeOutline, ellipsisVertical } from 'ionicons/icons';
+import {
+  pencilOutline,
+  trashOutline,
+  createOutline,
+  checkmarkOutline,
+  closeOutline,
+  ellipsisVertical
+} from 'ionicons/icons';
 
 interface Post {
   post_id: string;
@@ -45,6 +55,8 @@ const FeedContainer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [popoverState, setPopoverState] = useState<{ open: boolean; event: Event | null; postId: string | null }>({ open: false, event: null, postId: null });
+
+  const modalRef = useRef<HTMLIonContentElement | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -108,6 +120,7 @@ const FeedContainer = () => {
     setEditingPost(post);
     setPostContent(post.post_content);
     setIsModalOpen(true);
+    setTimeout(() => modalRef.current?.scrollToTop(), 200);
   };
 
   const savePost = async () => {
@@ -132,18 +145,23 @@ const FeedContainer = () => {
   return (
     <div style={{ marginTop: '1rem' }}>
       {user && (
-        <IonCard className="post-box">
+        <IonCard className="post-box animate-fade">
           <IonCardHeader>
-            <IonCardTitle>Share Your Thoughts</IonCardTitle>
+            <IonCardTitle>What's on your mind?</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonInput
               value={postContent}
               onIonChange={e => setPostContent(e.detail.value!)}
-              placeholder="Write something interesting..."
+              placeholder="Share something awesome..."
               className="input-area"
             />
-            <IonButton expand="block" onClick={createPost} disabled={!postContent.trim()}>
+            <IonButton
+              expand="block"
+              onClick={createPost}
+              disabled={!postContent.trim()}
+              style={{ marginTop: '0.5rem' }}
+            >
               <IonIcon icon={createOutline} slot="start" />
               Post
             </IonButton>
@@ -151,52 +169,63 @@ const FeedContainer = () => {
         </IonCard>
       )}
 
-      {posts.map(post => (
-        <IonCard key={post.post_id} className="post-card">
-          <IonCardHeader>
-            <IonRow>
-              <IonCol size="auto">
-                <IonAvatar>
-                  <img src={post.avatar_url} alt={`${post.username}'s avatar`} />
-                </IonAvatar>
-              </IonCol>
-              <IonCol>
-                <IonCardTitle>{post.username}</IonCardTitle>
-                <IonCardSubtitle>{new Date(post.post_created_at).toLocaleString()}</IonCardSubtitle>
-              </IonCol>
-              <IonCol size="auto">
-                <IonButton
-                  fill="clear"
-                  onClick={(e) =>
-                    setPopoverState({ open: true, event: e.nativeEvent, postId: post.post_id })
-                  }
+      <IonGrid>
+        {posts.map(post => (
+          <IonRow key={post.post_id} className="animate-fade">
+            <IonCol>
+              <IonCard className="post-card">
+                <IonCardHeader>
+                  <IonRow>
+                    <IonCol size="auto">
+                      <IonAvatar>
+                        <img src={post.avatar_url} alt={`${post.username}'s avatar`} />
+                      </IonAvatar>
+                    </IonCol>
+                    <IonCol>
+                      <IonCardTitle>{post.username}</IonCardTitle>
+                      <IonCardSubtitle>{new Date(post.post_created_at).toLocaleString()}</IonCardSubtitle>
+                    </IonCol>
+                    <IonCol size="auto">
+                      <IonButton
+                        fill="clear"
+                        onClick={(e) =>
+                          setPopoverState({ open: true, event: e.nativeEvent, postId: post.post_id })
+                        }
+                      >
+                        <IonIcon icon={ellipsisVertical} />
+                      </IonButton>
+                    </IonCol>
+                  </IonRow>
+                </IonCardHeader>
+
+                <IonCardContent>
+                  <IonText>{post.post_content}</IonText>
+                  {post.post_created_at !== post.post_updated_at && (
+                    <IonChip color="warning" outline style={{ marginTop: '10px' }}>
+                      <IonLabel>Edited</IonLabel>
+                    </IonChip>
+                  )}
+                </IonCardContent>
+
+                <IonPopover
+                  isOpen={popoverState.open && popoverState.postId === post.post_id}
+                  event={popoverState.event}
+                  onDidDismiss={() => setPopoverState({ open: false, event: null, postId: null })}
                 >
-                  <IonIcon icon={ellipsisVertical} />
-                </IonButton>
-              </IonCol>
-            </IonRow>
-          </IonCardHeader>
-
-          <IonCardContent>
-            <IonText>{post.post_content}</IonText>
-          </IonCardContent>
-
-          <IonPopover
-            isOpen={popoverState.open && popoverState.postId === post.post_id}
-            event={popoverState.event}
-            onDidDismiss={() => setPopoverState({ open: false, event: null, postId: null })}
-          >
-            <div style={{ padding: '10px' }}>
-              <IonButton fill="clear" onClick={() => { startEditingPost(post); setPopoverState({ open: false, event: null, postId: null }); }}>
-                <IonIcon icon={pencilOutline} slot="start" /> Edit
-              </IonButton>
-              <IonButton fill="clear" color="danger" onClick={() => { deletePost(post.post_id); setPopoverState({ open: false, event: null, postId: null }); }}>
-                <IonIcon icon={trashOutline} slot="start" /> Delete
-              </IonButton>
-            </div>
-          </IonPopover>
-        </IonCard>
-      ))}
+                  <div style={{ padding: '10px', display: 'flex', flexDirection: 'column' }}>
+                    <IonButton fill="clear" onClick={() => { startEditingPost(post); setPopoverState({ open: false, event: null, postId: null }); }}>
+                      <IonIcon icon={pencilOutline} slot="start" /> Edit
+                    </IonButton>
+                    <IonButton fill="clear" color="danger" onClick={() => { deletePost(post.post_id); setPopoverState({ open: false, event: null, postId: null }); }}>
+                      <IonIcon icon={trashOutline} slot="start" /> Delete
+                    </IonButton>
+                  </div>
+                </IonPopover>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        ))}
+      </IonGrid>
 
       <IonModal isOpen={isModalOpen} onDidDismiss={() => setIsModalOpen(false)}>
         <IonHeader>
@@ -204,11 +233,11 @@ const FeedContainer = () => {
             <IonTitle>Edit Post</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent className="ion-padding">
+        <IonContent ref={modalRef} className="ion-padding">
           <IonTextarea
             autoGrow
             value={postContent}
-            placeholder="Edit your post..."
+            placeholder="Edit your post here..."
             onIonChange={e => setPostContent(e.detail.value!)}
             className="edit-textarea"
           />

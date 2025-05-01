@@ -9,7 +9,7 @@ import {
   useIonRouter,
 } from '@ionic/react';
 import { useState } from 'react';
-import { supabase } from '../utils/supabaseClient'; 
+import { supabase } from '../utils/supabaseClient';
 
 const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({
   message,
@@ -53,7 +53,7 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen className="ion-padding" scrollY={false}>
-        {/* Enhanced Background Design */}
+        {/* Background */}
         <div
           style={{
             position: 'absolute',
@@ -99,6 +99,20 @@ const Login: React.FC = () => {
             transition: 'transform 0.3s ease',
           }}
         >
+          {/* Avatar Image */}
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_UcfTf_3pw9XytXkKq-VpYTy5W6BYGOMLUJA2U90hlb1iZd3SK478E7Gmizze5eQ9jds&usqp=CAU"
+            alt="User Avatar"
+            style={{
+              width: '90px',
+              height: '90px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              marginBottom: '20px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+            }}
+          />
+
           <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '30px', color: '#333' }}>
             Welcome Back, Let’s Sign In
           </h2>

@@ -15,6 +15,7 @@ import {
   IonCardTitle,
   IonAlert,
   IonSpinner,
+  IonAvatar,
 } from '@ionic/react';
 import { supabase } from '../utils/supabaseClient';
 import bcrypt from 'bcryptjs';
@@ -227,8 +228,25 @@ const Register: React.FC = () => {
               boxShadow: '0 15px 30px rgba(0,0,0,0.1)',
               textAlign: 'center',
               zIndex: 1,
+              position: 'relative',
             }}
           >
+            {/* Avatar */}
+            <IonAvatar
+              style={{
+                width: '100px',
+                height: '100px',
+                marginBottom: '20px',
+                border: '3px solid #38ada9',
+                position: 'absolute',
+                top: '-40px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+            >
+              <img src="https://f.i.uol.com.br/fotografia/2024/10/28/17301525896720088d065aa_1730152589_3x2_xl.jpg" alt="Avatar" />
+            </IonAvatar>
+
             <h1 style={{ fontSize: '26px', fontWeight: 'bold', color: '#333' }}>Create your account</h1>
 
             <IonInput style={inputStyle} label="Username" labelPlacement="floating" fill="outline" type="text" placeholder="Enter a unique username" value={username} onIonChange={e => setUsername(e.detail.value!)} />
